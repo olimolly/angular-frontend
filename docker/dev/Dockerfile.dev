@@ -1,0 +1,20 @@
+# Dockerfile.dev
+FROM node:18
+
+WORKDIR /app
+
+# Étape 1 : copier les fichiers de dépendances et installer
+COPY package*.json ./
+RUN npm install -g @angular/cli && npm install
+
+# Étape 2 : copier le reste du projet (angular.json, src/, etc.)
+COPY . .
+
+# ✅ Désactiver l’analytics Angular une fois le projet copié
+RUN ng analytics off
+
+# Exposer le port Angular
+EXPOSE 4200
+
+# Lancer Angular dans le conteneur avec hot reload
+CMD ["ng", "serve", "--host", "0.0.0.0", "--disable-host-check"]
